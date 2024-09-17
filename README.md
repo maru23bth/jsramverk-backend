@@ -37,7 +37,10 @@ Save a new document
 + Body
 
     ```json
-    Document
+    {
+        title: (string),
+        content: (string),
+    }
     ```
 
 + Response 200 (application/json)
@@ -54,7 +57,10 @@ Update document with :id
 + Body
 
     ```json
-    Document
+    {
+        title: (string),
+        content: (string),
+    }
     ```
 
 + Response 200 (application/json)
@@ -84,8 +90,7 @@ Delete document with :id
     {
         id: (string),
         title: (string),
-        content: (string),
-        created_at: (string)
+        content: (string)
     }
 
 
