@@ -31,13 +31,16 @@ Get a specific document
         ```
 
 
-### PUT /documents
+### POST /documents
 Save a new document
 
 + Body
 
     ```json
-    Document
+    {
+        title: (string),
+        content: (string)
+    }
     ```
 
 + Response 200 (application/json)
@@ -48,13 +51,16 @@ Save a new document
         Document
         ```
 
-### /documents/:id
+### PUT /documents/:id
 Update document with :id
 
 + Body
 
     ```json
-    Document
+    {
+        title: (string),
+        content: (string)
+    }
     ```
 
 + Response 200 (application/json)
@@ -65,15 +71,17 @@ Update document with :id
         Document
         ```
 
-### PUT /documents
-Save a new document
+### DELETE /documents/:id
+Delete document with :id
 
 + Response 200 (application/json)
 
     + Body
 
         ```json
-        Document
+        {
+            "message": "Document deleted"
+        }
         ```
 
 ## Data structures
