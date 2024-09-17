@@ -53,4 +53,3 @@ router.delete('/:id', async (req, res) => {
     }
     res.json({message: 'Document deleted'});
 });
-

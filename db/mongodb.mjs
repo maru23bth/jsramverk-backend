@@ -67,14 +67,16 @@ export async function getDocument(id) {
 
 /**
  * Returns a safe document object
- * @param {{title: string, content: string}} document 
- * @returns {{title: string, content: string}}
+ * @param {{title?: string, content?: string}} document 
+ * @returns {{title?: string, content?: string}}
  */
 function safeDocument(document) {
-    return {
-        title: String(document.title || ''),
-        content: String(document.content || ''),
-    }
+    const doc = {};
+    if (document.title)
+        doc.title = String(document.title);
+    if (document.content)
+        doc.content = String(document.content);
+    return doc;
 }
 
 /**
@@ -118,7 +120,6 @@ export async function updateDocument(id, document) {
 /**
  * Delete a document from the database
  * @param {string} id 
- * @param {boolean} closeClient close the connection after deleting document
  * @returns {number} number of deleted documents
  */
 export async function deleteDocument(id) {
