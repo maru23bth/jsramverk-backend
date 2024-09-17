@@ -39,7 +39,7 @@ Save a new document
     ```json
     {
         title: (string),
-        content: (string),
+        content: (string)
     }
     ```
 
@@ -59,7 +59,7 @@ Update document with :id
     ```json
     {
         title: (string),
-        content: (string),
+        content: (string)
     }
     ```
 

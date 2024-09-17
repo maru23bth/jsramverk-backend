@@ -26,6 +26,6 @@ app.listen(port, () => {
 
 app.get('/', (req, res) => {
   const readmeContent = fs.readFileSync('README.md', 'utf8');
-  const converter = new showdown.Converter();
+  const converter = new showdown.Converter({completeHTMLDocument: true});
   res.send(converter.makeHtml(readmeContent));
 });
