@@ -15,7 +15,6 @@ describe('HTTP', () => {
     const res = await request(app).get('/');
 
       expect(res.statusCode).toEqual(200);
-    //expect(JSON.parse(res.body)).toBeInstanceOf(Array)
   })
 
   it('should post /documents', async () => {
