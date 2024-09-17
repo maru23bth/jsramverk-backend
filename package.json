@@ -1,0 +1,26 @@
+{
+  "name": "jsramverk-backend",
+  "version": "1.0.0",
+  "description": "Backend in our https://jsramverk.se/ implementation",
+  "main": "app.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maru23bth/jsramverk-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maru23bth/jsramverk-backend/issues"
+  },
+  "homepage": "https://github.com/maru23bth/jsramverk-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongodb": "^6.9.0",
+    "morgan": "^1.10.0"
+  }
+}
