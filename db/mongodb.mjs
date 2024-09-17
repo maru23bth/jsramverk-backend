@@ -8,7 +8,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@jsr
 
 /**
  * Create a new MongoClient
- * @returns MongoClient
+ * @returns {MongoClient}
  */
 const client = new MongoClient(uri, {
   serverApi: {
@@ -18,19 +18,21 @@ const client = new MongoClient(uri, {
   }
 });
 
+/** connects client */
 export async function connect() {
     await client.connect();
 }
 
+/** closes db connection */
 export async function close() {
     await client.close();
 }
 
 /**
  * Get array documents from the database
- * @param object query filter
- * @param boolean closeClient close the connection after fetching documents
- * @returns array of documents
+ * @param {{}} query filter
+ * @param {boolean} closeClient close the connection after fetching documents
+ * @returns {Array} of documents
  */
 export async function getDocuments(query={}) {
   try {
@@ -49,9 +51,9 @@ export async function getDocuments(query={}) {
 
 /**
  * Get a document from the database by id
- * @param string id
- * @param boolean closeClient close the connection after fetching document
- * @returns Document object or null
+ * @param {string} id
+ * @param {boolean} closeClient close the connection after fetching document
+ * @returns {object|null} Document object or null
  */
 export async function getDocument(id) {
     try {
@@ -63,15 +65,27 @@ export async function getDocument(id) {
 }
 
 /**
+ * Returns a safe document object
+ * @param {{title: string, content: string}} document 
+ * @returns {{title: string, content: string}}
+ */
+function safeDocument(document) {
+    return {
+        title: String(document.title || ''),
+        content: String(document.content || ''),
+    }
+}
+
+/**
  * Save a document to the database
  * @param {} document
- * @returns Document id or null
+ * @returns {string|null} Document id or null
  */
 export async function createDocument(document) {
     
     try {
         const collection = client.db("SSREditor").collection("Documents")
-        const result = await collection.insertOne(document);
+        const result = await collection.insertOne(safeDocument(document));
         return result.insertedId?.toString() || null;
     } catch (error) {
         console.error(error);
@@ -81,9 +95,9 @@ export async function createDocument(document) {
 
 /**
  * Update the document with id
- * @param string id
- * @param {} document
- * @returns number of matched documents or null
+ * @param {string} id
+ * @param {object} document
+ * @returns {number|null} number of matched documents or null
  */
 export async function updateDocument(id, document) {
     
@@ -91,7 +105,7 @@ export async function updateDocument(id, document) {
         const collection = client.db("SSREditor").collection("Documents")
         const objectId = new ObjectId(id);
         // update
-        const result = await collection.updateOne({_id: objectId}, {$set: document});
+        const result = await collection.updateOne({_id: objectId}, {$set: safeDocument(document)});
 
         return result.matchedCount;
     } catch (error) {
@@ -101,10 +115,10 @@ export async function updateDocument(id, document) {
 }
 
 /**
- * 
- * @param string id 
- * @param boolean closeClient close the connection after deleting document
- * @returns number of deleted documents
+ * Delete a document from the database
+ * @param {string} id 
+ * @param {boolean} closeClient close the connection after deleting document
+ * @returns {number} number of deleted documents
  */
 export async function deleteDocument(id) {
     try {
@@ -116,4 +130,3 @@ export async function deleteDocument(id) {
         return 0;
     }
 }
-
