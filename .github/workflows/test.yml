@@ -26,7 +26,6 @@ jobs:
           node-version: '20.x'
       - run: npm ci
       - run: |
-          touch .env
-          echo "DB_USER=${{ env.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ env.DB_PASSWORD }}" >> .env
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}          
           npm run test
