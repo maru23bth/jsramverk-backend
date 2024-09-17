@@ -11,11 +11,11 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@jsr
  * @returns {MongoClient}
  */
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
 });
 
 /** connects client */
@@ -34,19 +34,20 @@ export async function close() {
  * @param {boolean} closeClient close the connection after fetching documents
  * @returns {Array} of documents
  */
-export async function getDocuments(query={}) {
-  try {
-    const collection = client.db("SSREditor").collection("Documents")
-    const documents = await collection.find(query).toArray()
-    documents.forEach(doc => {
-      doc.id = doc._id.toString();
-      delete doc._id;
-    });
-    return documents;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+export async function getDocuments(query = {}) {
+    try {
+        const collection = client.db("SSREditor").collection("Documents")
+        const documents = await collection.find(query).toArray()
+        documents.forEach(doc => {
+            doc.created_at = doc._id.getTimestamp();
+            doc.id = doc._id.toString();
+            delete doc._id;
+        });
+        return documents;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 }
 
 /**
@@ -57,7 +58,7 @@ export async function getDocuments(query={}) {
  */
 export async function getDocument(id) {
     try {
-        const documents = await getDocuments({_id: new ObjectId(id)});
+        const documents = await getDocuments({ _id: new ObjectId(id) });
         return documents[0] || null;
     } catch {
         return null;
@@ -82,7 +83,7 @@ function safeDocument(document) {
  * @returns {string|null} Document id or null
  */
 export async function createDocument(document) {
-    
+
     try {
         const collection = client.db("SSREditor").collection("Documents")
         const result = await collection.insertOne(safeDocument(document));
@@ -100,12 +101,12 @@ export async function createDocument(document) {
  * @returns {number|null} number of matched documents or null
  */
 export async function updateDocument(id, document) {
-    
+
     try {
         const collection = client.db("SSREditor").collection("Documents")
         const objectId = new ObjectId(id);
         // update
-        const result = await collection.updateOne({_id: objectId}, {$set: safeDocument(document)});
+        const result = await collection.updateOne({ _id: objectId }, { $set: safeDocument(document) });
 
         return result.matchedCount;
     } catch (error) {
@@ -123,7 +124,7 @@ export async function updateDocument(id, document) {
 export async function deleteDocument(id) {
     try {
         const collection = client.db("SSREditor").collection("Documents")
-        const result = await collection.deleteOne({_id: new ObjectId(id)});
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
         return result.deletedCount || 0;
     } catch (error) {
         console.error(error);

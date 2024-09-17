@@ -90,7 +90,8 @@ Delete document with :id
     {
         id: (string),
         title: (string),
-        content: (string)
+        content: (string),
+        created_at: (string)
     }
 
 
