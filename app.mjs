@@ -7,7 +7,7 @@ import showdown from 'showdown';
 import fs from 'fs';
 
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 export const app = express();
 app.disable('x-powered-by');
