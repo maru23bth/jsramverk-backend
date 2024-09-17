@@ -25,4 +25,4 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm ci
-      - run: DB_USER=${{ secrets.DB_USER }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} npm run test
+      - run: DB_USER=${{ env.DB_USER }} DB_PASSWORD=${{ env.DB_PASSWORD }} npm run test
