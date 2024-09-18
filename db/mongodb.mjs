@@ -37,12 +37,10 @@ export async function close() {
 export async function getDocuments(query = {}) {
     try {
         const collection = client.db("SSREditor").collection("Documents")
-        const documents = await collection.find(query).toArray()
-        documents.forEach(doc => {
-            doc.created_at = doc._id.getTimestamp();
-            doc.id = doc._id.toString();
-            delete doc._id;
-        });
+
+        // Get all documents, convert _id to string and add created, filter out null values
+        const documents = (await collection.find(query).toArray()).map(fullDocument).filter(Boolean);
+
         return documents;
     } catch (error) {
         console.error(error);
@@ -66,7 +64,7 @@ export async function getDocument(id) {
 }
 
 /**
- * Returns a safe document object
+ * Returns a safe document object to insert into the database
  * @param {{title?: string, content?: string}} document 
  * @returns {{title?: string, content?: string}}
  */
@@ -77,6 +75,22 @@ function safeDocument(document) {
     if (document.content)
         doc.content = String(document.content);
     return doc;
+}
+
+/**
+ * Returns a full document object with created_at and id
+ * @param {{_id: ObjectId, title: string, content: string}} document
+ * @returns {{created_at: Date, id: string, title: string, content: string}|null}
+ */
+function fullDocument(document) {
+    try {
+        const doc = safeDocument(document);
+        doc.created_at = document._id.getTimestamp();
+        doc.id = document._id.toString();
+        return doc;
+    } catch {
+        return null;
+    }
 }
 
 /**
