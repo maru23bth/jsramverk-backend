@@ -2,6 +2,13 @@
 
 Backend express server for the [js framework](https://jsramverk.se/) course.
 
+
+To clone the repo.
+
+```
+git clone https://github.com/maru23bth/jsramverk-backend
+```
+
 Installation.
 ```
 npm install
