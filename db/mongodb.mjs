@@ -3,6 +3,8 @@ import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import 'dotenv/config'
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@jsramverk.tx1lg.mongodb.net/?retryWrites=true&w=majority&appName=jsramverk`;
+const dbName = process.env.DB_NAME || 'SSREditor';
+const collectionName = process.env.DB_COLLECTION || 'Documents';
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
@@ -36,7 +38,7 @@ export async function close() {
  */
 export async function getDocuments(query = {}) {
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
 
         // Get all documents, convert _id to string and add created, filter out null values
         const documents = (await collection.find(query).toArray()).map(fullDocument).filter(Boolean);
@@ -101,7 +103,7 @@ function fullDocument(document) {
 export async function createDocument(document) {
 
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const result = await collection.insertOne(safeDocument(document));
         return result.insertedId?.toString() || null;
     } catch (error) {
@@ -119,7 +121,7 @@ export async function createDocument(document) {
 export async function updateDocument(id, document) {
 
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const objectId = new ObjectId(id);
         // update
         const result = await collection.updateOne({ _id: objectId }, { $set: safeDocument(document) });
@@ -138,7 +140,7 @@ export async function updateDocument(id, document) {
  */
 export async function deleteDocument(id) {
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const result = await collection.deleteOne({ _id: new ObjectId(id) });
         return result.deletedCount || 0;
     } catch (error) {
