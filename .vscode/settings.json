@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/b4fc9717-b9ff-4743-8656-0e28688e1d2c/resourceGroups/DIDA-MARU23-DV1677-H24-LP1/providers/Microsoft.Web/sites/jsramverk-maru23",
+    "appService.deploySubpath": "."
+}
