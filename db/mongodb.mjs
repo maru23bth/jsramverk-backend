@@ -72,9 +72,9 @@ export async function getDocument(id) {
  */
 function safeDocument(document) {
     const doc = {};
-    if (document.title)
+    if (document.hasOwnProperty('title'))
         doc.title = String(document.title);
-    if (document.content)
+    if (document.hasOwnProperty('content'))
         doc.content = String(document.content);
     return doc;
 }
