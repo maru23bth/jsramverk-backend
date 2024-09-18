@@ -1,5 +1,27 @@
 # jsramverk-backend
 
+Backend express server for the [js framework](https://jsramverk.se/) course.
+
+Installation.
+```
+npm install
+```
+
+To get started running the website.
+```
+npm run start
+```
+
+To started the website in development mode.
+```
+npm run dev
+```
+
+To run tests.
+```
+npm run test
+```
+
 
 ## API routes
 
