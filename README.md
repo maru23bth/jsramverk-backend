@@ -1,5 +1,34 @@
 # jsramverk-backend
 
+Backend express server for the [js framework](https://jsramverk.se/) course.
+
+
+To clone the repo.
+
+```
+git clone https://github.com/maru23bth/jsramverk-backend
+```
+
+Installation.
+```
+npm install
+```
+
+To get started running the website.
+```
+npm run start
+```
+
+To started the website in development mode.
+```
+npm run dev
+```
+
+To run tests.
+```
+npm run test
+```
+
 
 ## API routes
 

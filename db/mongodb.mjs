@@ -3,6 +3,8 @@ import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import 'dotenv/config'
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@jsramverk.tx1lg.mongodb.net/?retryWrites=true&w=majority&appName=jsramverk`;
+const dbName = process.env.DB_NAME || 'SSREditor';
+const collectionName = process.env.DB_COLLECTION || 'Documents';
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
@@ -36,13 +38,11 @@ export async function close() {
  */
 export async function getDocuments(query = {}) {
     try {
-        const collection = client.db("SSREditor").collection("Documents")
-        const documents = await collection.find(query).toArray()
-        documents.forEach(doc => {
-            doc.created_at = doc._id.getTimestamp();
-            doc.id = doc._id.toString();
-            delete doc._id;
-        });
+        const collection = client.db(dbName).collection(collectionName)
+
+        // Get all documents, convert _id to string and add created, filter out null values
+        const documents = (await collection.find(query).toArray()).map(fullDocument).filter(Boolean);
+
         return documents;
     } catch (error) {
         console.error(error);
@@ -66,7 +66,7 @@ export async function getDocument(id) {
 }
 
 /**
- * Returns a safe document object
+ * Returns a safe document object to insert into the database
  * @param {{title?: string, content?: string}} document 
  * @returns {{title?: string, content?: string}}
  */
@@ -80,6 +80,22 @@ function safeDocument(document) {
 }
 
 /**
+ * Returns a full document object with created_at and id
+ * @param {{_id: ObjectId, title: string, content: string}} document
+ * @returns {{created_at: Date, id: string, title: string, content: string}|null}
+ */
+function fullDocument(document) {
+    try {
+        const doc = safeDocument(document);
+        doc.created_at = document._id.getTimestamp();
+        doc.id = document._id.toString();
+        return doc;
+    } catch {
+        return null;
+    }
+}
+
+/**
  * Save a document to the database
  * @param {} document
  * @returns {string|null} Document id or null
@@ -87,7 +103,7 @@ function safeDocument(document) {
 export async function createDocument(document) {
 
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const result = await collection.insertOne(safeDocument(document));
         return result.insertedId?.toString() || null;
     } catch (error) {
@@ -105,7 +121,7 @@ export async function createDocument(document) {
 export async function updateDocument(id, document) {
 
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const objectId = new ObjectId(id);
         // update
         const result = await collection.updateOne({ _id: objectId }, { $set: safeDocument(document) });
@@ -124,7 +140,7 @@ export async function updateDocument(id, document) {
  */
 export async function deleteDocument(id) {
     try {
-        const collection = client.db("SSREditor").collection("Documents")
+        const collection = client.db(dbName).collection(collectionName)
         const result = await collection.deleteOne({ _id: new ObjectId(id) });
         return result.deletedCount || 0;
     } catch (error) {
