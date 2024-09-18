@@ -14,6 +14,19 @@ Installation.
 npm install
 ```
 
+To configure create an .env file in root of repo.
+```
+# Mongodb
+DB_USER=
+DB_PASSWORD=
+DB_NAME="SSREditor"
+DB_COLLECTION="Documents"
+
+# Express HTTP Server
+PORT=1337
+```
+
+
 To get started running the website.
 ```
 npm run start
