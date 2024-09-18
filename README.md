@@ -45,6 +45,12 @@ npm run test
 
 ## API routes
 
+All data is transfered using json.
+
+Sucess are reported with HTTP status 2XX.
+
+Errors are reported with HTTP status >= 400.
+
 ### GET /documents
 List all documents
 
@@ -52,7 +58,7 @@ List all documents
 
     + Body
 
-        ```json
+        ```
         [
             Document,
             Document,
@@ -68,7 +74,7 @@ Get a specific document
 
     + Body
 
-        ```json
+        ```
         Document
         ```
 
@@ -76,12 +82,12 @@ Get a specific document
 ### POST /documents
 Save a new document
 
-+ Body
++ Body (application/json)
 
     ```json
     {
-        title: (string),
-        content: (string)
+        "title"?: "(string)",
+        "content"?: "(string)"
     }
     ```
 
@@ -89,19 +95,19 @@ Save a new document
 
     + Body
 
-        ```json
+        ```
         Document
         ```
 
 ### PUT /documents/:id
 Update document with :id
 
-+ Body
++ Body (application/json)
 
     ```json
     {
-        title: (string),
-        content: (string)
+        "title"?: "(string)",
+        "content"?: "(string)"
     }
     ```
 
@@ -109,7 +115,7 @@ Update document with :id
 
     + Body
 
-        ```json
+        ```
         Document
         ```
 
