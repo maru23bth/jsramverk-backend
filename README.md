@@ -84,7 +84,7 @@ Save a new document
 
 + Body (application/json)
 
-    ```
+    ```ts
     {
         "title"?: "(string)",
         "content"?: "(string)"
