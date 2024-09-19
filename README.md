@@ -84,7 +84,7 @@ Save a new document
 
 + Body (application/json)
 
-    ```json
+    ```
     {
         "title"?: "(string)",
         "content"?: "(string)"
@@ -104,7 +104,7 @@ Update document with :id
 
 + Body (application/json)
 
-    ```json
+    ```
     {
         "title"?: "(string)",
         "content"?: "(string)"
@@ -126,7 +126,7 @@ Delete document with :id
 
     + Body
 
-        ```json
+        ```
         {
             "message": "Document deleted"
         }
@@ -135,12 +135,15 @@ Delete document with :id
 ## Data structures
 
 ### Document
-    {
-        id: (string),
-        title: (string),
-        content: (string),
-        created_at: (string)
-    }
+
+```
+{
+    id: "(string)",
+    title: "(string)",
+    content: "(string)",
+    created_at: "(string)"
+}
+```
 
 
 ## Response codes
