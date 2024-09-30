@@ -103,8 +103,13 @@ function fullDocument(document) {
 export async function createDocument(document) {
 
     try {
-        const collection = client.db(dbName).collection(collectionName)
-        const result = await collection.insertOne(safeDocument(document));
+        const collection = client.db(dbName).collection(collectionName);
+        const doc = safeDocument(document);
+        if(!doc.title) {
+            return null;
+        }
+        const result = await collection.insertOne(doc);
+        
         return result.insertedId?.toString() || null;
     } catch (error) {
         console.error(error);
