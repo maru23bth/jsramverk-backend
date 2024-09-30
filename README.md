@@ -58,7 +58,7 @@ List all documents
 
     + Body
 
-        ```
+        ```ts
         [
             Document,
             Document,
@@ -84,10 +84,10 @@ Save a new document
 
 + Body (application/json)
 
-    ```json
+    ```ts
     {
-        "title"?: "(string)",
-        "content"?: "(string)"
+        title?: "(string)",
+        content?: "(string)"
     }
     ```
 
@@ -104,10 +104,10 @@ Update document with :id
 
 + Body (application/json)
 
-    ```json
+    ```ts
     {
-        "title"?: "(string)",
-        "content"?: "(string)"
+        title?: "(string)",
+        content?: "(string)"
     }
     ```
 
@@ -135,12 +135,15 @@ Delete document with :id
 ## Data structures
 
 ### Document
-    {
-        id: (string),
-        title: (string),
-        content: (string),
-        created_at: (string)
-    }
+
+```ts
+{
+    id: "(string)",
+    title: "(string)",
+    content: "(string)",
+    created_at: "(string)"
+}
+```
 
 
 ## Response codes
