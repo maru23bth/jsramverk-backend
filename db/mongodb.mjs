@@ -86,9 +86,12 @@ function safeDocument(document) {
  */
 function fullDocument(document) {
     try {
-        const doc = safeDocument(document);
-        doc.created_at = document._id.getTimestamp();
-        doc.id = document._id.toString();
+        const doc = {
+            title: document.title || '',
+            content: document.content || '',
+            created_at: document._id.getTimestamp(),
+            id: document._id.toString(),
+        }
         return doc;
     } catch {
         return null;
@@ -97,7 +100,7 @@ function fullDocument(document) {
 
 /**
  * Save a document to the database
- * @param {} document
+ * @param {title: string, content?: string} document
  * @returns {string|null} Document id or null
  */
 export async function createDocument(document) {
@@ -106,7 +109,7 @@ export async function createDocument(document) {
         const collection = client.db(dbName).collection(collectionName);
         const doc = safeDocument(document);
         if(!doc.title) {
-            return null;
+            throw new Error('Title is required');
         }
         const result = await collection.insertOne(doc);
         
