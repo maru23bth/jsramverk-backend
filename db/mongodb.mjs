@@ -12,7 +12,7 @@ const collectionName = process.env.DB_COLLECTION || 'Documents';
  * Create a new MongoClient
  * @returns {MongoClient}
  */
-const client = new MongoClient(uri, {
+export const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,

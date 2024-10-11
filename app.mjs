@@ -3,6 +3,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import documentsRoutes from './routes/documents.mjs';
+import authRoutes from './routes/auth.mjs';
 import showdown from 'showdown';
 import fs from 'fs';
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/documents', documentsRoutes);
+app.use('/auth', authRoutes);
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
