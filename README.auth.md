@@ -3,7 +3,7 @@
 ## Middleware
 First import middlewareCheckToken
 
-import middlewareCheckToken as auth from '../db/auth.mjs';
+import middlewareCheckToken from '../db/auth.mjs';
 
 // Then use it on the route you want to protect
 router.get('/', middlewareCheckToken , ...
