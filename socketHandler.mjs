@@ -1,11 +1,10 @@
-import { updateDocument, getDocument } from './db/documentCollection.mjs'
+import { updateContentUseThrottling, updateTitleUseThrottling } from './utility.mjs'
 
-let timeoutTitle;
-let timeoutContent;
 
 export default function socketHandler(io) {
     io.on('connection', (socket) => {
-        console.log("user connected")
+        console.log('User connected');
+
         socket.on('my-create-room', (documentId) => {
             socket.join(documentId);
         });
@@ -14,39 +13,14 @@ export default function socketHandler(io) {
 
             socket.to(documentId).emit('document-content-change', { documentId, content });
 
-            clearTimeout(timeoutContent);
-            timeoutContent = setTimeout(async () => {
-                try {
-                updateDocument(documentId, {
-                    content: content,
-                    lastModified: new Date()
-                })
-                const res = await getDocument(documentId);
-                console.log(res);
-                } catch (error) {
-                console.log(error)
-                }
-            }, 2000);
+            updateContentUseThrottling(documentId, content, socket);
         });
 
         socket.on('document-title-change', ({ documentId, title }) => {
 
+            socket.to(documentId).emit('document-title-change', { documentId, title });
 
-        socket.to(documentId).emit('document-title-change', { documentId, title });
-
-            clearTimeout(timeoutTitle);
-            timeoutTitle = setTimeout(async () => {
-                try {
-                await updateDocument(documentId, {
-                    title: title,
-                    lastModified: new Date()
-                });
-                const res = await getDocument(documentId);
-                console.log(res);
-                } catch (error) {
-                console.log(error);
-                }
-            }, 2000);
+            updateTitleUseThrottling(documentId, title, socket);
         });
 
         socket.on('disconnect', () => {

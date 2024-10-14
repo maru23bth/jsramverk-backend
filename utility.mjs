@@ -1,35 +1,40 @@
 
-import { updateDocument, getDocument } from './db/documentCollection.mjs'
+import { updateDocument } from './db/documentCollection.mjs'
 
 
-
-function updateContentUseThrottling(documentId, content) {
+function updateContentUseThrottling(documentId, content, socket) {
     let timeoutContent;
 
     clearTimeout(timeoutContent);
     timeoutContent = setTimeout(async () => {
-        updateDocument(documentId, {
+        try {
+        await updateDocument(documentId, {
             content: content,
             lastModified: new Date()
-        }).then(
-        getDocument(documentId).then((res) => console.log(res)).catch((error) => console.log(error))
-        ).catch((error) => console.log(error));
-    }, 4000);
+        });
+        socket.emit('document-saved');
+        } catch (error) {
+            console.log(error)
+        }
+    }, 2000);
 }
 
 
-function updateTitleUseThrottling(documentId, title) {
+function updateTitleUseThrottling(documentId, title, socket) {
     let timeoutTitle;
 
     clearTimeout(timeoutTitle);
     timeoutTitle = setTimeout(async () => {
-        updateDocument(documentId, {
+        try {
+        await updateDocument(documentId, {
             title: title,
             lastModified: new Date()
-        }).then(
-        getDocument(documentId).then((res) => console.log(res)).catch((error) => console.log(error))
-        ).catch((error) => console.log(error));
-    }, 4000);
+        });
+        socket.emit('document-saved');
+        } catch (error) {
+            console.log(error);
+        }
+    }, 2000);
 }
 
 export { updateContentUseThrottling, updateTitleUseThrottling };
