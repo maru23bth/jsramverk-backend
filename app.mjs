@@ -25,10 +25,10 @@ app.use('/documents', documentsRoutes);
 
 const clientDev = 'http://localhost:3000';
 const clientProd = 'https://www.student.bth.se/~maru23/editor';
-const client = process.env.NODE_ENV === 'production' ? clientProd : clientDev;
+
 const io = new Server(httpServer, {
   cors: {
-    origin: client
+    origin: [clientDev, clientProd]
   }
 });
 
