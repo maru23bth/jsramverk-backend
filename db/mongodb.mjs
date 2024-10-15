@@ -12,7 +12,7 @@ const collectionName = process.env.DB_COLLECTION || 'Documents';
  * Create a new MongoClient
  * @returns {MongoClient}
  */
-const client = new MongoClient(uri, {
+export const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -86,9 +86,12 @@ function safeDocument(document) {
  */
 function fullDocument(document) {
     try {
-        const doc = safeDocument(document);
-        doc.created_at = document._id.getTimestamp();
-        doc.id = document._id.toString();
+        const doc = {
+            title: document.title || '',
+            content: document.content || '',
+            created_at: document._id.getTimestamp(),
+            id: document._id.toString(),
+        }
         return doc;
     } catch {
         return null;
@@ -97,14 +100,19 @@ function fullDocument(document) {
 
 /**
  * Save a document to the database
- * @param {} document
+ * @param {title: string, content?: string} document
  * @returns {string|null} Document id or null
  */
 export async function createDocument(document) {
 
     try {
-        const collection = client.db(dbName).collection(collectionName)
-        const result = await collection.insertOne(safeDocument(document));
+        const collection = client.db(dbName).collection(collectionName);
+        const doc = safeDocument(document);
+        if(!doc.title) {
+            throw new Error('Title is required');
+        }
+        const result = await collection.insertOne(doc);
+        
         return result.insertedId?.toString() || null;
     } catch (error) {
         console.error(error);
