@@ -115,7 +115,7 @@ export async function createDocument(document) {
         
         return result.insertedId?.toString() || null;
     } catch (error) {
-        //console.error(error);
+        console.error(error);
         return null;
     }
 }
