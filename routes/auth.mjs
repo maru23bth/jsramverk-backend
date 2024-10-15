@@ -60,7 +60,14 @@ router.post('/invite', auth.middlewareCheckToken, async (req, res) => {
     }
 
     try {
-        await auth.sendEmail(req.body.email, 'Invitation to join', 'You have been invited to join the application');
+        await auth.sendEmail(
+            req.body.email,
+            'Invitation to join',
+            `You have been invited to join the application.\n
+            \n
+            Please click the following link to sign up:\n
+            https://www.student.bth.se/~maru23/editor/auth/signup
+            `);
         res.json({message: 'Email sent'});
     } catch (error) {
         res.status(400).json({error: error.message});
