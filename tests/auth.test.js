@@ -46,6 +46,6 @@ describe('Send Email Test', () => {
 
     it('should test that sendEmail works', async () => {
         
-        expect(auth.sendEmail('maru23@student.bth.se','Test Subject', 'Test Content new')).toBeUndefined();
+        expect(await auth.sendEmail('maru23@student.bth.se','Test Subject', 'Test Content new')).toBeUndefined();
     });
 })
