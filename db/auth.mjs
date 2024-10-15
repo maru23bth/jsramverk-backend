@@ -86,10 +86,13 @@ export async function authenticateUser(username, password) {
  * @returns {object | false} user object or false if authentication fails
  */
 export function decodeToken(token) {
+    console.log(token)
     try {
+        // Verify and decode the token using the secret
         return jwt.verify(token, secret);
     } catch (error) {
-        return false;
+        console.error('Token verification failed:', error.message);
+        return null;  // Return null if token is invalid
     }
 }
 
@@ -124,6 +127,34 @@ export async function middlewareCheckToken(req, res, next) {
     }
 
     next();
+}
+
+export async function socketMiddlewareCheckToken(socket, next) {
+    try {
+        const token = socket.handshake.auth.token;
+
+        // If no token is present, reject the connection
+        if (!token) {
+            console.error('Token missing');
+            return next(new Error('Token is required'));
+        }
+
+        // Try to decode the token (ensure decodeToken works correctly)
+        socket.user = decodeToken(token);
+        console.log(socket.user)
+        if (!socket.user) {
+            console.error('Invalid token');
+            return next(new Error('Invalid token'));
+        }
+
+        // If everything is okay, continue with the connection
+        console.log('Token is valid, user:', socket.user);
+        next();
+    } catch (error) {
+        // Catch any unexpected errors
+        console.error('Error in token middleware:', error);
+        return next(new Error('Authentication error'));
+    }
 }
 
 /**

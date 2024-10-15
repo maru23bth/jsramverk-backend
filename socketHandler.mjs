@@ -1,9 +1,13 @@
 import { updateContentUseThrottling, updateTitleUseThrottling } from './utility.mjs'
+import jwt from 'jsonwebtoken';
+import { socketMiddlewareCheckToken } from './db/auth.mjs'
 
 
 export default function socketHandler(io) {
+    io.use( socketMiddlewareCheckToken );
+
     io.on('connection', (socket) => {
-        console.log('User connected');
+        console.log('User connected:', socket.user);
 
         socket.on('my-create-room', (documentId) => {
             socket.join(documentId);
