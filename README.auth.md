@@ -27,7 +27,7 @@ First import socketMiddlewareCheckToken
 import socketMiddlewareCheckToken from '../db/auth.mjs';
 
 // Then use it on the route you want to protect
-io.use(socketMiddlewareCheckToken))
+io.use(socketMiddlewareCheckToken)
 
 If you want to access user information you can do so on the socket object
 socket.user = {
