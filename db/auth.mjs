@@ -103,7 +103,7 @@ export function createToken(user) {
 }
 
 /**
- * Middleware to validate jwt token
+ * Express middleware to validate jwt token
  * @param {Request} req
  * @param {Response} res
  * @param {NextFunction} next
@@ -125,6 +125,30 @@ export async function middlewareCheckToken(req, res, next) {
 
     next();
 }
+
+/**
+ * Socket.io middleware to validate jwt token
+ * @param {Object} socket socket.io socket object
+ * @param {Function} next 
+ * @returns {void} Stores user object in socket.user
+ */
+export async function socketMiddlewareCheckToken(socket, next) {
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+        next(new Error('Token is required'));
+        return;
+    }
+
+    socket.user = decodeToken(token);
+    if (!socket.user) {
+        next(new Error('Invalid token'));
+        return;
+    }
+
+    next();
+}
+
 
 /**
  * Send email
