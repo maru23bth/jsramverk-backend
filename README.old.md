@@ -132,134 +132,19 @@ Delete document with :id
         }
         ```
 
-
-### POST /documents/:id/comment
-Save a new comment
-
-+ Body (application/json)
-
-    ```ts
-    {
-        content: "(string)",
-        location: "(string)"
-    }
-    ```
-
-+ Response 200 (application/json)
-
-    + Body
-
-        ```
-        Document
-        ```
-
-### PUT /documents/:id/comment/:commentId
-Updatecomment
-
-+ Body (application/json)
-
-    ```ts
-    {
-        content: "(string)"
-    }
-    ```
-
-+ Response 200 (application/json)
-
-    + Body
-
-        ```
-        Document
-        ```
-
-
-
- 
-
-### DELETE /documents/:id/comment/:commentId
-Delete comment with :commentId from document with :id
-
-+ Response 200 (application/json)
-
-    + Body
-
-        ```
-        Document
-        ```
-
-
-### POST /documents/:id/collaborator
-Add a new collaborator
-
-+ Body (application/json)
-
-    ```ts
-    {
-        userId: "(string)"
-    }
-    ```
-
-+ Response 200 (application/json)
-
-    + Body
-
-        ```
-        Document
-        ```
-
-### DELETE /documents/:id/collaborator
-Delete collaborator
-
-+ Body (application/json)
-
-    ```ts
-    {
-        userId: "(string)"
-    }
-    ```
-
-+ Response 200 (application/json)
-
-    + Body
-
-        ```
-        Document
-        ```
-
-
 ## Data structures
 
 ### Document
 
 ```ts
 {
-    id: string,
-    type: string,
-    title: string,
-    content: string,
-    collaborators: User[],
-    comments: Comment[]
+    id: "(string)",
+    title: "(string)",
+    content: "(string)",
+    created_at: "(string)"
 }
 ```
 
-### User
-```ts
-{
-    id: string,
-    username: string,
-    email: string
-}
-```
-
-### Comment
-```ts
-{
-    id: string,
-    author: User,
-    content: string,
-    location: string
-}
-```
 
 ## Response codes
 - 2XX - Successful responses

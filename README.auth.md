@@ -105,7 +105,7 @@ Create user
         ```
 
 ### POST /auth/invite
-Send email with invoite to email
+Send email with invite to register to specified email
 
 + Body
     ```json
@@ -123,6 +123,8 @@ Send email with invoite to email
             "message": "Email sent"
         }
         ```
+
+
 
 ## Data structures
 
