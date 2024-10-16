@@ -10,6 +10,7 @@ router.get('/', auth.middlewareCheckToken , async (req, res) => {
         res.status(401).json({error: 'Invalid token'});
         return;
     }
+
     res.json(res.locals.user);
 });
 

@@ -86,13 +86,12 @@ export async function authenticateUser(username, password) {
  * @returns {object | false} user object or false if authentication fails
  */
 export function decodeToken(token) {
-    console.log(token)
     try {
         // Verify and decode the token using the secret
         return jwt.verify(token, secret);
     } catch (error) {
         console.error('Token verification failed:', error.message);
-        return null;  // Return null if token is invalid
+        return false;  // Return false if token is invalid
     }
 }
 
@@ -102,6 +101,7 @@ export function decodeToken(token) {
  * @returns {string} jwt token
  */
 export function createToken(user) {
+    console.log("createToken secret", secret)
     return jwt.sign({ id: user.id, username: user.username, email: user.email }, secret, { expiresIn: '24h' });
 }
 
@@ -141,7 +141,7 @@ export async function socketMiddlewareCheckToken(socket, next) {
 
         // Try to decode the token (ensure decodeToken works correctly)
         socket.user = decodeToken(token);
-        console.log(socket.user)
+
         if (!socket.user) {
             console.error('Invalid token');
             return next(new Error('Invalid token'));

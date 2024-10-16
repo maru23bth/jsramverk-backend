@@ -1,9 +1,9 @@
 import { updateContentUseThrottling, updateTitleUseThrottling } from './utility.mjs'
-import jwt from 'jsonwebtoken';
 import { socketMiddlewareCheckToken } from './db/auth.mjs'
 
 
 export default function socketHandler(io) {
+    // Middleware authenticates user
     io.use( socketMiddlewareCheckToken );
 
     io.on('connection', (socket) => {
