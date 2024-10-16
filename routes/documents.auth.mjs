@@ -18,13 +18,13 @@ router.get('/:id', auth.middlewareCheckToken, async (req, res) => {
 // POST /documents - Create a new document 
 router.post('/', auth.middlewareCheckToken, async (req, res) => {
     console.log(req.body);
-    const id = await db.createDocument(res.locals.user, req.body.title, req.body.content);
+    const id = await db.createDocument(res.locals.user, req.body.title, req.body.content, req.body.type || 'text');
     if (!id) {
         res.status(500).json({error: 'Failed to create document'});
         return;
     }
     console.log('Created document with id: ', id);
-    res.json(await db.getDocument(id));
+    res.json(await db.getDocument(res.locals.user, id));
 });
 
 // PUT /documents/:id - Update a specific document
@@ -62,10 +62,12 @@ router.post('/:id/comment', auth.middlewareCheckToken, async (req, res) => {
 
     console.log(req.body);
     const result = await db.addComment(res.locals.user, req.params.id, req.body.content, req.body.location);
+console.log('result', result);    
     if (!result) {
         res.status(500).json({error: 'Failed to update document'});
         return;
     }
+console.log('getDocument', res.locals.user, req.params.id);    
     res.json(await db.getDocument(res.locals.user, req.params.id));
 });
 

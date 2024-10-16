@@ -60,7 +60,7 @@ function formatDocument(document) {
  */
 function formatUser(user) {
     return {
-        id: user._id.toString(),
+        id: user.id || user._id?.toString(),
         username: user.username,
         email: user.email,
     }
@@ -262,10 +262,11 @@ export async function deleteDocument(user, id) {
 export async function addComment(user, id, content, location) {
     try {
         const comment = {
-            id: ObjectId().toString(),
+            id: new ObjectId().toString(),
             content,
             location,
             createdAt: new Date(),
+            author: user,
         };
         const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION);
         const result = await collection.updateOne({ _id: ObjectId.createFromHexString(id), collaborators: user.id }, { $push: { comments: comment } });
