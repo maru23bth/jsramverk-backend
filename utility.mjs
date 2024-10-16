@@ -1,10 +1,11 @@
 
 import { updateDocument } from './db/documentCollection.mjs'
 
+let timeoutTitle;
+let timeoutContent;
+
 
 function updateContentUseThrottling(documentId, content, socket) {
-    let timeoutContent;
-
     clearTimeout(timeoutContent);
     timeoutContent = setTimeout(async () => {
         try {
@@ -21,8 +22,6 @@ function updateContentUseThrottling(documentId, content, socket) {
 
 
 function updateTitleUseThrottling(documentId, title, socket) {
-    let timeoutTitle;
-
     clearTimeout(timeoutTitle);
     timeoutTitle = setTimeout(async () => {
         try {
