@@ -27,7 +27,7 @@ router.post('/', auth.middlewareCheckToken, async (req, res) => {
     res.json(await db.getDocument(id));
 });
 
-// PUT /documents/:id - Get a specific document
+// PUT /documents/:id - Update a specific document
 router.put('/:id', auth.middlewareCheckToken, async (req, res) => {
 
     // Check if document exists
@@ -45,7 +45,7 @@ router.put('/:id', auth.middlewareCheckToken, async (req, res) => {
     res.json(await db.getDocument(res.locals.user, req.params.id));
 });
 
-// DELETE /documents/:id - delete a specific document
+// DELETE /documents/:id - Delete a specific document
 router.delete('/:id', auth.middlewareCheckToken, async (req, res) => {
     const result = await db.deleteDocument(res.locals.user, req.params.id);
     if (!result) {
@@ -53,4 +53,65 @@ router.delete('/:id', auth.middlewareCheckToken, async (req, res) => {
         return;
     }
     res.json({message: 'Document deleted'});
+});
+
+
+// Handle comments
+// POST /documents/:id/comment - Add a comment to a document
+router.post('/:id/comment', auth.middlewareCheckToken, async (req, res) => {
+
+    console.log(req.body);
+    const result = await db.addComment(res.locals.user, req.params.id, req.body.content, req.body.location);
+    if (!result) {
+        res.status(500).json({error: 'Failed to update document'});
+        return;
+    }
+    res.json(await db.getDocument(res.locals.user, req.params.id));
+});
+
+// PUT /documents/:id/comment/:commentId - Add a comment to a document
+router.put('/:id/comment/:commentId', auth.middlewareCheckToken, async (req, res) => {
+
+    console.log(req.body);
+    const result = await db.updateComment(res.locals.user, req.params.id, req.params.commentId, req.body.content);
+    if (!result) {
+        res.status(500).json({error: 'Failed to update document'});
+        return;
+    }
+    res.json(await db.getDocument(res.locals.user, req.params.id));
+});
+
+// DELETE /documents/:id/comment/:commentId - Add a comment to a document
+router.delete('/:id/comment/:commentId', auth.middlewareCheckToken, async (req, res) => {
+
+    const result = await db.deleteComment(res.locals.user, req.params.id, req.params.commentId);
+    if (!result) {
+        res.status(500).json({error: 'Failed to update document'});
+        return;
+    }
+    res.json(await db.getDocument(res.locals.user, req.params.id));
+});
+
+// POST /documents/:id/collaborator - Add collaborator
+router.post('/:id/collaborator', auth.middlewareCheckToken, async (req, res) => {
+
+    console.log(req.body);
+    const result = await db.addCollaborator(res.locals.user, req.params.id, req.body.userId);
+    if (!result) {
+        res.status(500).json({error: 'Failed to update document'});
+        return;
+    }
+    res.json(await db.getDocument(res.locals.user, req.params.id));
+});
+
+// DELETE /documents/:id/collaborator - Del collaborator
+router.delete('/:id/collaborator', auth.middlewareCheckToken, async (req, res) => {
+
+    console.log(req.body);
+    const result = await db.removeCollaborator(res.locals.user, req.params.id, req.body.userId);
+    if (!result) {
+        res.status(500).json({error: 'Failed to update document'});
+        return;
+    }
+    res.json(await db.getDocument(res.locals.user, req.params.id));
 });
