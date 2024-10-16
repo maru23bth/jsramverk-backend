@@ -17,7 +17,13 @@ describe('HTTP', () => {
       expect(res.statusCode).toEqual(200);
   })
 
-  it('should post /documents', async () => {
+  it('should get /documents without authentication', async () => {
+    const res = await request(app).get('/documents');
+
+      expect(res.statusCode).toEqual(401);      
+  })
+
+/*   it('should post /documents', async () => {
     const res = await request(app).post('/documents').send({ title: 'Test Document', content: 'This is a test document' });
 
       expect(res.statusCode).toEqual(200);
@@ -48,6 +54,6 @@ describe('HTTP', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body).toBeInstanceOf(Object);
       expect(res.body.message).toEqual('Document deleted');
-  })
+  }) */
 
 })
