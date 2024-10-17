@@ -2,7 +2,8 @@ import 'dotenv/config'
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import documentsRoutes from './routes/documents.mjs';
+//import documentsRoutes from './routes/documents.mjs';
+import documentsRoutes from './routes/documents.auth.mjs';
 import authRoutes from './routes/auth.mjs';
 import showdown from 'showdown';
 import fs from 'fs';
