@@ -9,7 +9,7 @@ import sgMail from '@sendgrid/mail';
 import 'dotenv/config'
 
 const dbName = process.env.DB_NAME || 'SSREditor';
-const collectionName = process.env.DB_USER_COLLECTION || 'Users';
+const collectionName = process.env.DB_USERS_COLLECTION || 'Users';
 const secret = process.env.JWT_SECRET || '';
 const saltRounds = 10;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');

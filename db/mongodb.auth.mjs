@@ -4,8 +4,8 @@ import 'dotenv/config'
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@jsramverk.tx1lg.mongodb.net/?retryWrites=true&w=majority&appName=jsramverk`;
 const dbName = process.env.DB_NAME || 'SSREditor';
-const DB_DOCUMENTS_COLLECTION = 'DocumentWithUser';
-const DB_USERS_COLLECTION = 'Users';
+const DB_DOCUMENTS_COLLECTION = process.env.DB_DOCUMENTS_COLLECTION || 'DocumentWithUser';
+const DB_USERS_COLLECTION = process.env.DB_USERS_COLLECTION || 'Users';
 
 /**
  * Types

@@ -20,7 +20,8 @@ To configure create an .env file in root of repo.
 DB_USER=
 DB_PASSWORD=
 DB_NAME="SSREditor"
-DB_COLLECTION="Documents"
+DB_DOCUMENTS_COLLECTION="DocumentWithUser"
+DB_USERS_COLLECTION="Users"
 
 # Express HTTP Server
 PORT=1337
