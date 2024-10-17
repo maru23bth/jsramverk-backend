@@ -80,6 +80,13 @@ describe('HTTP', () => {
     expect(res.body.collaborators.find(user => user.id == '67069a72d34e3e15302c1970').id).toEqual('67069a72d34e3e15302c1970');
   })
       
+  it('should add collaborator by email, post /documents/:id/collaborator', async () => {
+    const res = await request(app).post(`/documents/${documentId}/collaborator`).send({ email: 'test@example.com' }).set('x-access-token', token);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.collaborators).toBeInstanceOf(Array);
+    expect(res.body.collaborators.find(user => user.email == 'test@example.com').email).toEqual('test@example.com');
+  })
+
   it('should delete /documents/:id/collaborator', async () => {
     const res = await request(app).delete(`/documents/${documentId}/collaborator`).send({ userId: '67069a72d34e3e15302c1970' }).set('x-access-token', token);
     expect(res.statusCode).toEqual(200);

@@ -64,7 +64,7 @@ router.post('/:id/comment', auth.middlewareCheckToken, async (req, res) => {
     const result = await db.addComment(res.locals.user, req.params.id, req.body.content, req.body.location);
 console.log('result', result);    
     if (!result) {
-        res.status(500).json({error: 'Failed to update document'});
+        res.status(500).json({error: 'Failed to add comment'});
         return;
     }
 console.log('getDocument', res.locals.user, req.params.id);    
@@ -77,7 +77,7 @@ router.put('/:id/comment/:commentId', auth.middlewareCheckToken, async (req, res
     console.log(req.body);
     const result = await db.updateComment(res.locals.user, req.params.id, req.params.commentId, req.body.content);
     if (!result) {
-        res.status(500).json({error: 'Failed to update document'});
+        res.status(500).json({error: 'Failed to update comment'});
         return;
     }
     res.json(await db.getDocument(res.locals.user, req.params.id));
@@ -88,7 +88,7 @@ router.delete('/:id/comment/:commentId', auth.middlewareCheckToken, async (req, 
 
     const result = await db.deleteComment(res.locals.user, req.params.id, req.params.commentId);
     if (!result) {
-        res.status(500).json({error: 'Failed to update document'});
+        res.status(500).json({error: 'Failed to delete comment'});
         return;
     }
     res.json(await db.getDocument(res.locals.user, req.params.id));
@@ -96,11 +96,15 @@ router.delete('/:id/comment/:commentId', auth.middlewareCheckToken, async (req, 
 
 // POST /documents/:id/collaborator - Add collaborator
 router.post('/:id/collaborator', auth.middlewareCheckToken, async (req, res) => {
+    let result;
+    if(req.body.userId) {
+        result = await db.addCollaborator(res.locals.user, req.params.id, req.body.userId);
+    } else if(req.body.email) {
+        result = await db.addCollaboratorByEmail(res.locals.user, req.params.id, req.body.email);
+    }
 
-    console.log(req.body);
-    const result = await db.addCollaborator(res.locals.user, req.params.id, req.body.userId);
     if (!result) {
-        res.status(500).json({error: 'Failed to update document'});
+        res.status(500).json({error: 'Failed to add collaborator'});
         return;
     }
     res.json(await db.getDocument(res.locals.user, req.params.id));
@@ -112,7 +116,7 @@ router.delete('/:id/collaborator', auth.middlewareCheckToken, async (req, res) =
     console.log(req.body);
     const result = await db.removeCollaborator(res.locals.user, req.params.id, req.body.userId);
     if (!result) {
-        res.status(500).json({error: 'Failed to update document'});
+        res.status(500).json({error: 'Failed to delete collaborator'});
         return;
     }
     res.json(await db.getDocument(res.locals.user, req.params.id));

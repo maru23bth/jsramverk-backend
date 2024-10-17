@@ -189,13 +189,14 @@ Delete comment with :commentId from document with :id
 
 
 ### POST /documents/:id/collaborator
-Add a new collaborator
+Add a new collaborator by userId or email
 
 + Body (application/json)
 
     ```ts
     {
-        userId: "(string)"
+        userId?: "(string)"
+        email?: "(string)"
     }
     ```
 

@@ -332,6 +332,22 @@ export async function addCollaborator(user, id, userId) {
     }
 }
 
+export async function addCollaboratorByEmail(user, id, email) {
+    try {
+        const collection = client.db(dbName).collection(DB_USERS_COLLECTION)
+        const userToAdd = await collection
+            .findOne({ email });
+        if (!userToAdd) {
+            throw new Error('User not found');
+        }
+        return addCollaborator(user, id, userToAdd._id.toString());
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
 /**
  * Remove a user from the collaborators of the document
  * @param {User} user
