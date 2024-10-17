@@ -9,7 +9,7 @@ import sgMail from '@sendgrid/mail';
 import 'dotenv/config'
 
 const dbName = process.env.DB_NAME || 'SSREditor';
-const collectionName = process.env.DB_USER_COLLECTION || 'Users';
+const collectionName = process.env.DB_USERS_COLLECTION || 'Users';
 const secret = process.env.JWT_SECRET || '';
 const saltRounds = 10;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
@@ -103,7 +103,7 @@ export function createToken(user) {
 }
 
 /**
- * Middleware to validate jwt token
+ * Express middleware to validate jwt token
  * @param {Request} req
  * @param {Response} res
  * @param {NextFunction} next
@@ -125,6 +125,30 @@ export async function middlewareCheckToken(req, res, next) {
 
     next();
 }
+
+/**
+ * Socket.io middleware to validate jwt token
+ * @param {Object} socket socket.io socket object
+ * @param {Function} next 
+ * @returns {void} Stores user object in socket.user
+ */
+export async function socketMiddlewareCheckToken(socket, next) {
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+        next(new Error('Token is required'));
+        return;
+    }
+
+    socket.user = decodeToken(token);
+    if (!socket.user) {
+        next(new Error('Invalid token'));
+        return;
+    }
+
+    next();
+}
+
 
 /**
  * Send email

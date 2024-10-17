@@ -1,6 +1,12 @@
 # jsramverk-backend
 
+## Environment variables
+JWT_SECRET="secret you want to use"
+SENDGRID_API_KEY="SG...."
+
 ## Middleware
+
+### Express middleware
 First import middlewareCheckToken
 
 import middlewareCheckToken from '../db/auth.mjs';
@@ -10,6 +16,21 @@ router.get('/', middlewareCheckToken , ...
 
 If you want to access user information you can do so on the Responce object
 res.locals.user = {
+    username,
+    email,
+    id
+}
+
+### Socket.io middleware
+First import socketMiddlewareCheckToken
+
+import socketMiddlewareCheckToken from '../db/auth.mjs';
+
+// Then use it on the route you want to protect
+io.use(socketMiddlewareCheckToken)
+
+If you want to access user information you can do so on the socket object
+socket.user = {
     username,
     email,
     id
@@ -84,7 +105,7 @@ Create user
         ```
 
 ### POST /auth/invite
-Send email with invoite to email
+Send email with invite to register to specified email
 
 + Body
     ```json
@@ -102,6 +123,8 @@ Send email with invoite to email
             "message": "Email sent"
         }
         ```
+
+
 
 ## Data structures
 
