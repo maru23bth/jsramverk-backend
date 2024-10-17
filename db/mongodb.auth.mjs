@@ -60,9 +60,9 @@ function formatDocument(document) {
  */
 function formatUser(user) {
     return {
-        id: user.id || user._id?.toString(),
-        username: user.username,
-        email: user.email,
+        id: user?.id || user?._id?.toString() || '',
+        username: user?.username || '',
+        email: user?.email || '',
     }
 }
 
