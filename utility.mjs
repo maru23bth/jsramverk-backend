@@ -1,39 +1,19 @@
 
-import { updateDocument } from './db/documentCollection.mjs'
+import { updateDocument } from './db/mongodb.auth.mjs'
 
-let timeoutTitle;
-let timeoutContent;
+let updateTimeout;
 
+export default function updateDocumentUseThrottling(documentId, newData, socket) {
+    clearTimeout(updateTimeout);
 
-function updateContentUseThrottling(documentId, content, socket) {
-    clearTimeout(timeoutContent);
-    timeoutContent = setTimeout(async () => {
+    updateTimeout = setTimeout(async () => {
         try {
-        await updateDocument(documentId, {
-            content: content,
-            lastModified: new Date()
-        });
-        socket.emit('document-saved');
+            // Send the updated document data to be saved
+            await updateDocument(socket.user, documentId, newData);
+            // Emit an event to notify that the document was saved
+            socket.emit('document-saved');
         } catch (error) {
-            console.log(error)
+            console.error('Error updating document:', error);
         }
     }, 2000);
 }
-
-
-function updateTitleUseThrottling(documentId, title, socket) {
-    clearTimeout(timeoutTitle);
-    timeoutTitle = setTimeout(async () => {
-        try {
-        await updateDocument(documentId, {
-            title: title,
-            lastModified: new Date()
-        });
-        socket.emit('document-saved');
-        } catch (error) {
-            console.log(error);
-        }
-    }, 2000);
-}
-
-export { updateContentUseThrottling, updateTitleUseThrottling };

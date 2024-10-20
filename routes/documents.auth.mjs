@@ -5,6 +5,26 @@ import * as auth from '../db/auth.mjs';
 const router = express.Router();
 export default router;
 
+// OBS! if placed after -> // GET /documents/:id - Get a specific document
+// router.get('/:id', auth.middlewareCheckToken, async (req, res) => {});
+// This route gets overridden because ':id' acts as a wild card
+// Need this to remove collaborator
+// to remove, need to send collaborator ID
+// -> db.removeCollaborator(res.locals.user, req.params.id, req.body.userId);
+// GET /documents/collaborator -  get user id by email, response with user id as a string
+router.get('/collaborator', auth.middlewareCheckToken, async (req, res) => {
+    const email = req.headers['x-email'];
+    const collaboratorId = await db.getUserIdByEmail(email)
+
+    if (!collaboratorId) {
+        res.status(404).json({error: 'User ID not found'});
+        return;
+    }
+
+    res.json({ collaboratorId });
+});
+
+
 // GET /documents - List all documents
 router.get('/', auth.middlewareCheckToken, async (req, res) => {
     res.json(await db.getUserDocuments(res.locals.user));
@@ -113,11 +133,20 @@ router.post('/:id/collaborator', auth.middlewareCheckToken, async (req, res) => 
 // DELETE /documents/:id/collaborator - Del collaborator
 router.delete('/:id/collaborator', auth.middlewareCheckToken, async (req, res) => {
 
-    console.log(req.body);
+    console.log('Delete collaborator', req.body);
     const result = await db.removeCollaborator(res.locals.user, req.params.id, req.body.userId);
     if (!result) {
         res.status(500).json({error: 'Failed to delete collaborator'});
         return;
     }
+
+    const document = await db.getDocument(res.locals.user, req.params.id);
+    const collaborators = document.collaborators;
+    let listCollaborators = `Collaborators of doc with id ${req.params.id}: `;
+    collaborators.forEach(collaborator => {
+        listCollaborators += ' ' + collaborator.email;
+    });
+    console.log(listCollaborators);
+
     res.json(await db.getDocument(res.locals.user, req.params.id));
 });

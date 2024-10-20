@@ -14,7 +14,7 @@ import middlewareCheckToken from '../db/auth.mjs';
 // Then use it on the route you want to protect
 router.get('/', middlewareCheckToken , ...
 
-If you want to access user information you can do so on the Responce object
+If you want to access user information you can do so on the Response object
 res.locals.user = {
     username,
     email,
@@ -38,9 +38,9 @@ socket.user = {
 
 ## API routes
 
-All data is transfered using json.
+All data is transferred using json.
 
-Sucess are reported with HTTP status 2XX.
+Success are reported with HTTP status 2XX.
 
 Errors are reported with HTTP status >= 400.
 

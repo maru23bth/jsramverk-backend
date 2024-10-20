@@ -88,7 +88,9 @@ export async function authenticateUser(username, password) {
 export function decodeToken(token) {
     try {
         // Verify and decode the token using the secret
-        return jwt.verify(token, secret);
+        const decoded = jwt.verify(token, secret);
+        console.log('Token successfully verified:', decoded);
+        return decoded;
     } catch (error) {
         console.error('Token verification failed:', error.message);
         return false;  // Return false if token is invalid
@@ -116,16 +118,19 @@ export async function middlewareCheckToken(req, res, next) {
     const token = req.headers['x-access-token'];
 
     if (!token) {
+        console.log('No token found in the request headers');
         res.status(401).json({ error: 'Token is required' });
         return;
     }
 
     res.locals.user = decodeToken(token);
     if (!res.locals.user) {
+        console.log('Invalid token');
         res.status(401).json({ error: 'Invalid token' });
         return;
     }
 
+    console.log('Token is valid, proceeding to next');
     next();
 }
 

@@ -46,9 +46,9 @@ npm run test
 
 ## API routes
 
-All data is transfered using json.
+All data is transferred using json.
 
-Sucess are reported with HTTP status 2XX.
+Success are reported with HTTP status 2XX.
 
 Errors are reported with HTTP status >= 400.
 

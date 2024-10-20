@@ -221,7 +221,6 @@ function getUpdateDocument(document) {
  * @returns {number|null} number of matched documents or null
  */
 export async function updateDocument(user, id, document) {
-
     try {
         const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION)
         // update
@@ -357,15 +356,56 @@ export async function addCollaboratorByEmail(user, id, email) {
  */
 export async function removeCollaborator(user, id, userId) {
     try {
-        if(user.id === userId) {
+        if (user.id === userId) {
             throw new Error('Cannot remove yourself from collaborators');
         }
 
-        const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION)
-        const result = await collection.updateOne({ _id: ObjectId.createFromHexString(id), collaborators: user.id }, { $pull: { collaborators: userId } });
+        const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION);
+
+        // Check if the document has this collaborator
+        const document = await collection.findOne({
+            _id: ObjectId.createFromHexString(id),
+            collaborators: userId,  // Check if the collaborator exists
+        });
+
+        if (!document) {
+            throw new Error('Collaborator not found');
+        }
+
+        // Proceed to remove the collaborator from the array
+        const result = await collection.updateOne(
+            { _id: ObjectId.createFromHexString(id) },
+            { $pull: { collaborators: userId } }
+        );
+
         return result.matchedCount;
+    } catch (error) {
+        console.error('Error removing collaborator:', error.message);
+        return null;  // Return null on failure
+    }
+}
+
+/**
+ * Get userID by email
+ * @param {string} email User email
+ * @returns {String} is User id
+ */
+export async function getUserIdByEmail(email) {
+    try {
+        const collection = client.db(dbName).collection(DB_USERS_COLLECTION)
+        const user = await collection
+            .findOne({ email });
+        if (!user) {
+            throw new Error('User not found');
+        } else {
+            const id = user?._id.toString();
+            return id;
+        }
     } catch (error) {
         console.error(error);
         return null;
     }
 }
+
+
+// console.log(await getUserIdByEmail('user2@test.se'))
