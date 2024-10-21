@@ -20,7 +20,7 @@ When document is being edited we make sure that the client socket emits event **
 When a user edits the content or the title of the document, this event is emitted.
 The change is then broadcasted to all other clients in the same room ***socket.to(documentId).emit('document-[title or content]-change', { documentId, [title or content] });***
 
-Finally, functions updateContentUseThrottling and updateTitleUseThrottling are used to prevent excessive updates or unnecessary server load.
+Finally, function updateDocumentUseThrottling is used to prevent excessive updates or unnecessary server load.
 
 The delay (2000ms or 2 seconds) ensures that updates are not fired too frequently but instead wait until the user stops interacting for 2 seconds.
 
