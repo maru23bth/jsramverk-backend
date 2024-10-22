@@ -21,23 +21,28 @@ app.disable('x-powered-by');
 
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(cors());
+
+const clientDev = 'http://localhost:3000';
+const clientProd = 'https://www.student.bth.se/~maru23/editor';
+const clientOlhaProd = 'https://www.student.bth.se/~olbr22/editor';
+
+const corsOptions = {
+  origin: [clientDev, clientProd, clientOlhaProd],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "x-email", "x-access-token"],
+  credentials: true
+};
+
+// Enable CORS before routes
+app.use(cors(corsOptions));
 
 app.use('/documents', documentsRoutes);
 app.use('/auth', authRoutes);
 
-const clientDev = 'http://localhost:3000';
-const clientProd = 'https://www.student.bth.se/~maru23/editor';
-
-const io = new Server(httpServer, {
-  cors: {
-    origin: [clientDev, clientProd]
-  }
-});
+const io = new Server(httpServer, { cors: corsOptions });
 
 // Use the socket handler
 socketHandler(io);
-
 
 const server = httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}`);
