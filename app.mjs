@@ -8,20 +8,37 @@ import authRoutes from './routes/auth.mjs';
 import showdown from 'showdown';
 import fs from 'fs';
 
+import { createServer } from 'node:http';
+import { Server } from 'socket.io';
+import socketHandler from './socketHandler.mjs';
 
 const port = process.env.PORT || 1337;
 
 export const app = express();
+const httpServer = createServer(app);
+
 app.disable('x-powered-by');
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 
+const clientDev = 'http://localhost:3000';
+const clientProd = 'https://www.student.bth.se';
+
+const corsOptions = {
+  origin: [clientDev, clientProd],
+};
+
 app.use('/documents', documentsRoutes);
 app.use('/auth', authRoutes);
 
-const server = app.listen(port, () => {
+const io = new Server(httpServer, { cors: corsOptions });
+
+// Use the socket handler
+socketHandler(io);
+
+const server = httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
