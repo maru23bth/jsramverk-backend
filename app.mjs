@@ -21,20 +21,14 @@ app.disable('x-powered-by');
 
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 const clientDev = 'http://localhost:3000';
-const clientProd = 'https://www.student.bth.se/~maru23/editor';
-const clientOlhaProd = 'https://www.student.bth.se/~olbr22/editor';
+const clientProd = 'https://www.student.bth.se';
 
 const corsOptions = {
-  origin: [clientDev, clientProd, clientOlhaProd],
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authorization", "x-email", "x-access-token"],
-  credentials: true
+  origin: [clientDev, clientProd],
 };
-
-// Enable CORS before routes
-app.use(cors(corsOptions));
 
 app.use('/documents', documentsRoutes);
 app.use('/auth', authRoutes);
