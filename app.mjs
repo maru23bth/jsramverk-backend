@@ -29,7 +29,7 @@ const clientOlhaProd = 'https://www.student.bth.se/~olbr22/editor';
 const corsOptions = {
   origin: [clientDev, clientProd, clientOlhaProd],
   methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authentication", "x-email", "x-access-token"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-email", "x-access-token"],
   credentials: true
 };
 
