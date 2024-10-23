@@ -46,6 +46,7 @@ export async function close() {
 function formatDocument(document) {
     return {
         id: document._id.toString(),
+        type: document.type,
         title: document.title,
         content: document.content,
         collaborators: document.collaborators?.map(formatUser) || [],
