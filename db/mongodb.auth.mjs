@@ -388,7 +388,7 @@ export async function removeCollaborator(user, id, userId) {
 /**
  * Get userID by email
  * @param {string} email User email
- * @returns {String} is User id
+ * @returns {String} id User id
  */
 export async function getUserIdByEmail(email) {
     try {
@@ -406,6 +406,3 @@ export async function getUserIdByEmail(email) {
         return null;
     }
 }
-
-
-// console.log(await getUserIdByEmail('user2@test.se'))
