@@ -20,6 +20,13 @@ describe('MongoDB Test', () => {
         expect(typeof documentId).toBe('string');
     })
 
+
+    it('should test that createDocument without title fails', async () => {
+        const document = { content: 'This is a test document' };
+        const documentId = await db.createDocument(document);
+        expect(documentId).toBeNull();
+    })
+
     it('should test that getDocuments returns an array', async () => {
         
         const documents = await db.getDocuments();
