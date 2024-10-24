@@ -40,6 +40,10 @@ export default function socketHandler(io) {
             socket.to(documentId).emit('add-comment-code-mode', { documentId, location });
         });
 
+        socket.on('remove-comment-code-mode', ({ documentId }) => {
+            socket.to(documentId).emit('remove-comment-code-mode', { documentId });
+        });
+
         // when switched to code mode swith hos another user too
         // show all changes in real time
         // when deleted and added comments
