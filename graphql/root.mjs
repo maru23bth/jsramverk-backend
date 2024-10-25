@@ -1,29 +1,38 @@
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLList, GraphQLString } from "graphql";
 import DocumentType from "./document.mjs";
-import { getDocument, getDocuments } from "../db/mongodb.mjs";
+import { getDocument, getDocuments, getUserDocuments } from "../db/mongodb.auth.mjs"
 
-const RootQueryType = new GraphQLObjectType({
-    name: 'Query',
-    description: 'Root Query',
+const RootQuery = new GraphQLObjectType({
+    name: 'RootQueryType',
     fields: () => ({
-        document: {
+        getDocumentById: {
             type: DocumentType,
-            description: 'A single document',
-            args: { id: { type: new GraphQLNonNull(GraphQLString) } },
-            resolve: async function (parent, { id }) {
-                const document = await getDocument(id)
-                return document
+            description: 'A single document by id',
+            args: { 
+                id: { type: GraphQLString }
+            },
+            resolve: async function (parent, { id }, context) {
+                console.log(`Context: ${context}`);
+                const user = context.user;
+                return await getDocument(user, id);
             }
         },
-        documents: {
+        getAllDocuments: {
             type: new GraphQLList(DocumentType),
             description: 'List of documents',
             resolve: async () => {
-                const documents = await getDocuments()
-                return documents
+                return await getDocuments(); 
+            }
+        },
+        getAllUserDocuments: {
+            type: new GraphQLList(DocumentType),
+            description: "List of all user's documents",
+            resolve: async (parent, args, context) => {
+                const user = context.user;
+                return await getUserDocuments(user);
             }
         }
     })
 })
 
-export default RootQueryType
+export default RootQuery

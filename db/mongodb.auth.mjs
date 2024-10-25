@@ -87,7 +87,7 @@ function formatComment(comment) {
  * @param {Object} query filter
  * @returns {Array} of documents
  */
-async function getDocuments(query = {}) {
+export async function getDocuments(query = {}) {
     try {
         const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION)
         const pipeline = [
