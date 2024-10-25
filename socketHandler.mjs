@@ -29,6 +29,25 @@ export default function socketHandler(io) {
             updateDocumentUseThrottling(documentId, { title }, socket);
         });
 
+        /* Code Mode */
+
+        socket.on('change-to-code-mode', ({ documentId, codeMode }) => {
+            console.log("codeMode:", codeMode);
+            socket.to(documentId).emit('change-to-code-mode', { documentId, codeMode });
+        });
+
+        socket.on('add-comment-code-mode', ({ documentId, location }) => {
+            socket.to(documentId).emit('add-comment-code-mode', { documentId, location });
+        });
+
+        socket.on('remove-comment-code-mode', ({ documentId }) => {
+            socket.to(documentId).emit('remove-comment-code-mode', { documentId });
+        });
+
+        // when switched to code mode swith hos another user too
+        // show all changes in real time
+        // when deleted and added comments
+
         socket.on('disconnect', () => {
             console.log('User disconnected');
         });

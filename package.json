@@ -25,8 +25,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.1",
     "mongodb": "^6.9.0",
     "morgan": "^1.10.0",
+    "ruru": "^2.0.0-beta.13",
     "showdown": "^2.1.0",
     "socket.io": "^4.8.0"
   },

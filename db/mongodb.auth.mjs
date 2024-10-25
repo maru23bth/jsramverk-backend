@@ -46,6 +46,7 @@ export async function close() {
 function formatDocument(document) {
     return {
         id: document._id.toString(),
+        type: document.type,
         title: document.title,
         content: document.content,
         collaborators: document.collaborators?.map(formatUser) || [],
@@ -86,7 +87,7 @@ function formatComment(comment) {
  * @param {Object} query filter
  * @returns {Array} of documents
  */
-async function getDocuments(query = {}) {
+export async function getDocuments(query = {}) {
     try {
         const collection = client.db(dbName).collection(DB_DOCUMENTS_COLLECTION)
         const pipeline = [
@@ -388,7 +389,7 @@ export async function removeCollaborator(user, id, userId) {
 /**
  * Get userID by email
  * @param {string} email User email
- * @returns {String} is User id
+ * @returns {String} id User id
  */
 export async function getUserIdByEmail(email) {
     try {
@@ -406,6 +407,3 @@ export async function getUserIdByEmail(email) {
         return null;
     }
 }
-
-
-// console.log(await getUserIdByEmail('user2@test.se'))
